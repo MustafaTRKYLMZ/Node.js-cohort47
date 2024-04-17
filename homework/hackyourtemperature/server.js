@@ -10,8 +10,7 @@ app.get("/", (req, res) => {
 
 app.post("/weather", async (req, res) => {
   const cityName = req.body.cityName;
-  res.setHeader("Content-Type", "application/json");
-  res.send(cityName);
+  res.json(cityName);
 });
 // listen to por t
 const PORT = 4200;
