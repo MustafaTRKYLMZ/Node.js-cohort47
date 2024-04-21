@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const fs = require("fs");
 
 // YOUR CODE GOES IN HERE
 app.get("/", function (req, res) {
@@ -9,6 +10,7 @@ app.get("/", function (req, res) {
 // Creating new posts
 app.post("/blogs", express.json(), (req, res) => {
   const { title, content } = req.body;
+
   fs.writeFileSync(`${title}.txt`, content);
   res.end("ok");
 });
@@ -50,7 +52,7 @@ app.get("/blogs/:title", (req, res) => {
   }
 });
 
-//Bonus/ read all posts
+//Bonus:Reading all posts
 app.get("/blogs", (req, res) => {
   const files = fs.readdirSync(__dirname);
   const blogPosts = files
