@@ -10,13 +10,13 @@ app.get("/", function (req, res) {
 // Creating new posts
 app.post("/blogs", express.json(), (req, res) => {
   const { title, content } = req.body;
-
+  console.log("title", title);
   fs.writeFileSync(`${title}.txt`, content);
   res.end("ok");
 });
 
 //Updating existing posts
-app.put("/posts/:title", express.json(), (req, res) => {
+app.put("/blogs/:title", express.json(), (req, res) => {
   const { title } = req.params;
   const { content } = req.body;
 
@@ -31,7 +31,7 @@ app.put("/posts/:title", express.json(), (req, res) => {
 // Deleting posts
 app.delete("/blogs/:title", (req, res) => {
   const { title } = req.params;
-
+  console.log("title for deleting", title);
   if (fs.existsSync(`${title}.txt`)) {
     fs.unlinkSync(`${title}.txt`);
     res.send("ok");
@@ -43,8 +43,8 @@ app.delete("/blogs/:title", (req, res) => {
 // Reading posts
 app.get("/blogs/:title", (req, res) => {
   const { title } = req.params;
-
-  if (fs.existsSync(`${title}.txt`)) {
+  const isBlogPostExist = fs.existsSync(`${title}.txt`);
+  if (isBlogPostExist) {
     const postContent = fs.readFileSync(`${title}.txt`, "utf8");
     res.send(postContent);
   } else {
@@ -62,3 +62,5 @@ app.get("/blogs", (req, res) => {
 });
 
 app.listen(3000);
+
+app.use(express.static(__dirname + "/routes/blogs"))
