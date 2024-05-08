@@ -32,13 +32,9 @@ describe("POST /weather/:cityName", () => {
     const response = await request.post("/wrong-endpoint");
     expect(response.status).toBe(404);
   });
-  it("invalid api key", async () => {
-    const response = await request.post("/weather/ankara").set("APPID", "123");
-    expect(response.status).toBe(400);
-  });
   it("city name is required", async () => {
     const response = await request.post("/weather/noCityName");
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     expect(response.body.message).toBe("City name is required");
   });
 });

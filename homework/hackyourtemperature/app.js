@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/weather/:cityName", async (req, res) => {
-  const cityName = req.body.cityName;
+  const cityName = req.params.cityName;
   if (!cityName) {
     return res.status(400).json({ message: "City name is required" });
   }
@@ -30,9 +30,10 @@ app.post("/weather/:cityName", async (req, res) => {
     } else if (weather.cod === 400) {
       return res.status(400).json({ weatherText: weather.message });
     } else {
+      const celsiusTemp = weather.main.temp - 273.15;
       return res.status(200).json({
         weatherText: weather.name,
-        temperature: weather.main.temp.toFixed(2),
+        temperature: celsiusTemp.toFixed(2),
       });
     }
   } catch (error) {
