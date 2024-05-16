@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/weather/:cityName", async (req, res) => {
-  const cityName = req.body.cityName;
+  const cityName = req.params.cityName;
   if (!cityName) {
     return res.status(400).json({ message: "City name is required" });
   }
@@ -20,7 +20,7 @@ app.post("/weather/:cityName", async (req, res) => {
       `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=${API_KEY}`
     );
     const weather = await weatherData.json();
-    console.log("weather Ankara >>>", weather);
+
     if (weather.cod === 404) {
       return res.status(404).json({ weatherText: "City is not found!" });
     } else if (weather.cod === 401) {
@@ -30,9 +30,10 @@ app.post("/weather/:cityName", async (req, res) => {
     } else if (weather.cod === 400) {
       return res.status(400).json({ weatherText: weather.message });
     } else {
+      const tempCelsius=weather.main.temp-−273.15
       return res.status(200).json({
         weatherText: weather.name,
-        temperature: weather.main.temp.toFixed(2),
+        temperature: tempCelsius,
       });
     }
   } catch (error) {
